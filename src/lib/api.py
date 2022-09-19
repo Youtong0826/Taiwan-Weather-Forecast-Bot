@@ -9,7 +9,7 @@ API_AUTHORIZATION = os.getenv("API_AUTHORZATION")
 
 API_URL = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/"
 
-API_SUFFIX = {
+API_FORECAST_SUFFIX = {
     "一般天氣狀況":"F-C0032-001",
     "宜蘭縣":"F-D0047-001",
     "桃園市":"F-D0047-005",
@@ -36,6 +36,10 @@ API_SUFFIX = {
     "台灣":"F-C0032-089",
 }
 
+API_OBSERVATION_SUFFIX = {
+    
+}
+
 API_ELEMENT = {
     "天氣預報綜合描述":"WeatherDescription",
     "12小時降雨機率":"PoP12h",
@@ -49,7 +53,7 @@ API_ELEMENT = {
     "風向":"WD",
     "溫度":"T",
 }
-def get_wheather(city:str="一般天氣狀況", location:str=None, limit:int=None, element:str=None):
+def get_forecast(city:str="一般天氣狀況", location:str=None, limit:int=None, element:str=None):
     headers = {"Authorization":API_AUTHORIZATION}
 
     params = {
@@ -58,7 +62,7 @@ def get_wheather(city:str="一般天氣狀況", location:str=None, limit:int=Non
         "elementName":element
     }
 
-    result = requests.get(API_URL+API_SUFFIX[str(city)],
+    result = requests.get(API_URL+API_FORECAST_SUFFIX[str(city)],
         headers=headers,
         params=params,
     )
