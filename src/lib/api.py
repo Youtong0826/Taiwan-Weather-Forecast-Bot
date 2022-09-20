@@ -5,8 +5,42 @@ import os
 
 load_dotenv()
 
-API_AUTHORIZATION = os.getenv("API_AUTHORZATION")
+CITYS = {
+    "北部":[
+        "臺北市",
+        "新北市",
+        "基隆市",
+        "桃園市",
+        "宜蘭縣",
+        "新竹縣",
+        "新竹市",
+    ],
+    "中部":[
+        "苗栗縣",
+        "南投縣",
+        "臺中市",
+        "彰化縣",
+        "雲林縣",
+    ],
+    "南部":[
+        "嘉義縣",
+        "嘉義市",
+        "臺南市",
+        "高雄市",
+        "屏東縣",
+        "澎湖縣"
+    ],
+    "東部":[
+        "臺東縣",
+        "花蓮縣"
+    ],
+    "離島":[
+        "金門縣",
+        "連江縣"
+    ]
+}
 
+API_AUTHORIZATION = os.getenv("API_AUTHORZATION")
 API_URL = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/"
 
 API_FORECAST_SUFFIX = {
@@ -37,10 +71,17 @@ API_FORECAST_SUFFIX = {
 }
 
 API_OBSERVATION_SUFFIX = {
-    
+    "氣象觀測":"O-A0001-001",
+    "雨量觀測":"O-A0002-001",
+    "即時天氣觀測":"O-A0003-001",
+    "每日酸雨pH值":"O-A0004-001",
+    "每日紫外線指數最大值":"O-A0005-001",
+    "臭氧總觀測資料":"O-A0006-001",
+    "48小時海象監測資料":"O-A0007-001",
+    "":"O-A0008-001",
 }
 
-API_ELEMENT = {
+API_FORECAST_ELEMENT = {
     "天氣預報綜合描述":"WeatherDescription",
     "12小時降雨機率":"PoP12h",
     "6小時降雨機率":"PoP6h",
@@ -53,6 +94,7 @@ API_ELEMENT = {
     "風向":"WD",
     "溫度":"T",
 }
+
 def get_forecast(city:str="一般天氣狀況", location:str=None, limit:int=None, element:str=None):
     headers = {"Authorization":API_AUTHORIZATION}
 
@@ -71,8 +113,17 @@ def get_forecast(city:str="一般天氣狀況", location:str=None, limit:int=Non
 
     if value["success"] != "true": return "Something went wrong"
 
-    return value["records"]["locations"][0]["location"][0]["weatherElement"]
+    raw_data = value["records"]["locations"][0]["location"][0]["weatherElement"]
+    data = [data["time"] for data in raw_data][0]
 
-for n in get_wheather("高雄市","小港區"):
-    print('\"'+ n["description"] + '\":\"'+ n["elementName"] + '\",' )
+    return data
+
+def print_element(func):
+    for n in func:
+        print('\"'+ n["description"] + '\":\"'+ n["elementName"] + '\",' )
+
+
+
+#for n in get_forecast("高雄市","小港區"):
+#    print('\"'+ n["description"] + '\":\"'+ n["elementName"] + '\",' )
 
