@@ -109,20 +109,18 @@ def get_forecast(city:str="一般天氣狀況", location:str=None, limit:int=Non
         params=params,
     )
 
-    value = json.loads(result.text)
+    result = json.loads(result.text)
 
-    if value["success"] != "true": return "Something went wrong"
+    if result["success"] != "true": return "Something went wrong"
 
-    raw_data = value["records"]["locations"][0]["location"][0]["weatherElement"]
-    data = [data["time"] for data in raw_data][0]
+    raw_data = result["records"]["locations"][0]["location"][0]["weatherElement"]
+    data = [ data["time"] for data in raw_data][0]
 
     return data
 
 def print_element(func):
     for n in func:
         print('\"'+ n["description"] + '\":\"'+ n["elementName"] + '\",' )
-
-
 
 #for n in get_forecast("高雄市","小港區"):
 #    print('\"'+ n["description"] + '\":\"'+ n["elementName"] + '\",' )

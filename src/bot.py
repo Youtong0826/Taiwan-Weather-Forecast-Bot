@@ -11,8 +11,8 @@ INTENTS = discord.Intents.all()
 bot = discord.Bot(intents=INTENTS)
 
 @bot.command(name="天氣預報",description="查詢各地的天氣預報")
-async def forecast(ctx,area:area_option,city:city_option,location:location_option):
-    result = get_forecast(city,location,element="Wx")
+async def forecast(ctx,area:area_option,city:city_option,location:location_option,element:element_option("forecast")):
+    result = get_forecast(city,location,element=API_FORECAST_ELEMENT[element])
 
     embed = discord.Embed(
         title=f"{city}-{location} 天氣預報",
